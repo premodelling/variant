@@ -2,10 +2,13 @@
 
 ## Variant
 
-Help notes w.r.t. the Variant Project
+<br>
 
 ### Q & A
 
+Help notes w.r.t. the Variant Project
+
+<br>
 
 Q: Graphs of Variant for Travel/non-Travel
 > "You are trying to find five different variants. The first one will be the one which has the largest proportion 
