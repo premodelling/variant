@@ -6,8 +6,6 @@
 
 ### Q & A
 
-Help notes w.r.t. the Variant Project
-
 <br>
 
 Q: Graphs of Variant for Travel/non-Travel
