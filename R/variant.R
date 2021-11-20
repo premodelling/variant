@@ -5,46 +5,38 @@
 
 
 
-#' Fuctions
+#' Functions
 source(file = 'R/functions/PrepareData.R')
+source('R/functions/VariantProgressionModel.R')
+source(file = 'R/functions/GraphsDelta.R')
+source(file = 'R/functions/GraphsPredominant.R')
+source(file = 'R/functions/GraphsStacks.R')
 
 
 
-#' Following on from Section 2
+#' Section 2
 #' Variants Data
 
-# Preparation
+# Preparation: reading-in, ascertaining field data types and/or contents
 variants <- PrepareData()
 str(object = variants)
 
 
 
 #' Section 3
-#' Non Travel Data Only
+#' Non-Travel Data
 
-# None travel data
+# 3.0
+# The non-travel data only
 local <- variants %>%
   dplyr::filter(travel == 'none')
 
+# 3.1.a
 # Delta proportions over time
-# Add title & caption
-local %>%
-  select(week, Delta) %>%
-  ggplot(mapping = aes(x = week, y = Delta)) +
-  geom_line(size = 0.15) +
-  geom_point(size = 0.75) +
-  theme_minimal()  +
-  theme(axis.text.x = element_text(size = 11, angle = 90),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(face = 'bold', size = 13),
-        axis.title.y = element_text(face = 'bold', size = 13),
-        legend.title = element_text(),
-        panel.grid.minor = element_blank(), panel.grid.major = element_line(size = 0.15)) +
-  xlab('\n') +
-  ylab('Delta Variant Proportion\n') +
-  scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y")
+GraphsDelta(local = local)
 
-#' Variant Peaks
+# 3.1.b
+# Variant Peaks
 peaks <- local %>%
   select(!(travel)) %>%
   tidyr::gather(key = 'variant', value = 'p', -week) %>%
@@ -56,12 +48,14 @@ peaks
 
 
 #' Section 4
+#' Graphs of Variant Proportions by Travel Category
 
+# 4.0
 # The melted form of 'variants'
 melted <- variants %>%
   tidyr::gather(key = 'variant', value = 'fraction', -c(week, travel))
 
-# The leading 5 variants reponsible for the most infections during the period in focus
+# The leading 5 variants reponsible for the most infections during the period the data encompasses
 leading <- melted %>%
   filter(variant != 'Other') %>%
   group_by(variant) %>%
@@ -72,91 +66,61 @@ leading
 # Hence, their data
 predominant <- dplyr::left_join(x = leading[, 'variant'], y = melted, by = 'variant', keep = FALSE)
 
-# ... the corresponding graph
-# ... add caption & title
-ggplot(data = predominant, mapping = aes(x = week, y = fraction)) +
-  geom_line(aes(colour = variant, linetype = travel)) +
-  geom_point(aes(colour = variant), size = 0.75) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(size = 11, angle = 90),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(face = 'bold', size = 13),
-        axis.title.y = element_text(face = 'bold', size = 13),
-        legend.title = element_text(),
-        panel.grid.minor = element_blank(), panel.grid.major = element_line(size = 0.15)) +
-  xlab('\n') +
-  ylab('Delta Variant Proportion\n') +
-  scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y")
 
-ggplot(data = predominant, mapping = aes(x = week, y = fraction)) +
-  geom_line(aes(colour = variant, linetype = travel)) +
-  geom_point(aes(colour = variant), size = 0.75) +
-  ggplot2::coord_trans(y = scales::sqrt_trans()) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(size = 11, angle = 90),
-        axis.text.y = element_text(size = 11),
-        axis.title.x = element_text(face = 'bold', size = 13),
-        axis.title.y = element_text(face = 'bold', size = 13),
-        legend.title = element_text(),
-        panel.grid.minor = element_blank(), panel.grid.major = element_line(size = 0.15)) +
-  xlab('\n') +
-  ylab('Delta Variant Proportion\n') +
-  scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y")
+# 4.1
+# GraphsPredominant
+PredominantVariants(predominant = predominant)
+PredominantVariantsZoom(predominant = predominant)
 
 
-# ... stacks
+# 4.2
+# The data for stacks of variant proportions, and the graphs
 stacksdata <- melted %>%
   mutate(segment = mapply(function (element, reference) if (element %in% reference) {element} else {'Other'},
-                          element =  variant, MoreArgs = list('reference' = core$variant)))
-
-stacksdata %>%
-  filter(travel == 'travel') %>%
-  group_by(week, segment) %>%
-  summarise(proportion = sum(fraction)) %>%
-  ggplot(mapping = aes(x = week, y = proportion), alpha = 0.25) +
-  geom_col(aes(fill = segment), alpha = 0.60) +
-  theme_minimal() +
-  xlab('\n') +
-  ylab('Variant Proportion\n') +
-  scale_x_date(date_breaks = "8 weeks", date_labels =  "%d %b %Y") +
-  scale_fill_discrete(name = 'Variant')
+                          element =  variant, MoreArgs = list('reference' = leading$variant))) %>%
+  group_by(week, travel, segment) %>%
+  summarise(proportion = sum(fraction), .groups = 'keep')
+StacksTravelYes(stacksdata = stacksdata)
+StacksTravelNo(stacksdata = stacksdata)
 
 
-stacksdata %>%
-  filter(travel == 'none') %>%
-  group_by(week, segment) %>%
-  summarise(proportion = sum(fraction)) %>%
-  ggplot(mapping = aes(x = week, y = proportion), alpha = 0.25) +
-  geom_col(aes(fill = segment), alpha = 0.60) +
-  theme_minimal() +
-  xlab('\n') +
-  ylab('Variant Proportion\n') +
-  scale_x_date(date_breaks = "8 weeks", date_labels =  "%d %b %Y") +
-  scale_fill_discrete(name = 'Variant')
-
-
+# 4.3
 # ... description of the bar graphs (4.3)
-# ...
+# Observations:
 
 
 
+#' 5
 #' New Variant Increase
+
+# VUI.21OCT.01 Data
 vui21oct01 <- variants %>%
   filter(travel == 'none') %>%
   select(week, 'VUI.21OCT.01')
 
+# Progression over time
 plot(vui21oct01$week, vui21oct01$VUI.21OCT.01,
      type = "l", lty = 'solid', col = 'black', lwd = 1.0,
      frame.plot = FALSE,
      xlab = '', ylab = 'proportion', main = 'VUI.21OCT.01')
 
-
-# ... model function, table expansion
+# The variant progression model, and its predictions
 starting <- min(vui21oct01$week)
 period <- lubridate::years(x = 1)
+estimates <- VariantProgressionModel(starting = starting, period = period)
 
-source('R/functions/VariantProgressionModel.R')
+# 1 September 2021
+estimates[estimates$date == '2021-09-01', c('date', 'prediction')]
 
-VariantProgressionModel(starting = starting, period = period)
+# Graph: VUI.21OCT.01 & predictions
+plot(x = vui21oct01$week, y = vui21oct01$VUI.21OCT.01,
+     ylim=c(min(vui21oct01$VUI.21OCT.01, estimates$prediction), max(vui21oct01$VUI.21OCT.01, estimates$prediction)),
+     xlim = c(min(vui21oct01$week, estimates$date), max(vui21oct01$week, estimates$date)),
+     type = "l", lty = 'solid', col = 'black', lwd = 2.5,
+     frame.plot = FALSE,
+     xlab = '', ylab = 'proportion', main = 'VUI.21OCT.01')
+points(x = estimates$date, y = estimates$prediction, pch = 19, cex = 0.5, col = scales::alpha(colour = 'grey', alpha = 0.25))
 
+# The first day of 2022
+estimates[estimates$date == '2022-01-01', c('date', 'prediction')]
 
