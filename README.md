@@ -2,11 +2,8 @@
 
 ## Variant
 
-<br>
 
 ### Q & A
-
-<br>
 
 Q: Graphs of Variant for Travel/non-Travel
 > "You are trying to find five different variants. The first one will be the one which has the largest proportion 
@@ -32,6 +29,23 @@ including a bar for “Other” such that the weekly proportions sum to one agai
 * [dplyr::select](https://dplyr.tidyverse.org/reference/select.html)
 
 * [a philosophy of clean code](https://www.tinyverse.org/)
+
+<br>
+<br>
+
+### Development Environment
+
+* Edit the help file skeletons in 'man', possibly combining help files
+  for multiple functions.
+* Edit the exports in 'NAMESPACE', and add necessary imports.
+* Put any C/C++/Fortran code in 'src'.
+* If you have compiled code, add a useDynLib() directive to
+  'NAMESPACE'.
+* Run R CMD build to build the package tarball.
+* Run R CMD check to check the package tarball.
+
+Read "Writing R Extensions" for more information.
+
 
 <br>
 <br>
