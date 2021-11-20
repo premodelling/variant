@@ -25,7 +25,7 @@ VariantProgressionModel <- function (starting, period) {
   estimates <- estimates %>%
     mutate(seconds = as.POSIXct(x = date, format = '%Y-%m-%d')) %>%
     mutate(days = lubridate::day(lubridate::seconds_to_period(seconds))) %>%
-    mutate(prediction = lapply(X = days, FUN = p))
+    mutate(prediction = as.numeric(lapply(X = days, FUN = p)))
 
   return(estimates)
 
