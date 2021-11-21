@@ -3,7 +3,7 @@
 # Created by: Think
 # Created on: 18/11/2021
 
-#' Prepare Data
+#' Data Get
 #'
 #' @description reads-in the variants data, and ensures that the
 #'
@@ -14,7 +14,7 @@
 #'
 #' @return appropriately formatted, and checked, dataframe of variants data
 #'
-PrepareData <- function () {
+DataGet <- function () {
 
   # Reading-in the data
   variants <- read.csv(file = 'data/variant_travel.csv')
@@ -49,5 +49,18 @@ PrepareData <- function () {
 }
 
 
+DataPreview <- function (variants) {
 
+  types <- names(x = variants)
+  types <- types[ !(types %in% c('week', 'travel')) ]
+
+  appears <- function (x) {
+    starting <- head(variants[which(variants[x] > 0), 'week'], 1)
+    return(c('variant' = x, '1st fraction > 0' = as.character(starting)))
+  }
+
+  preview <- dplyr::bind_rows(lapply(X = types, FUN = appears))
+
+  return(preview)
+}
 
