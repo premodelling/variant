@@ -6,8 +6,8 @@
 
 
 #' Functions
-source(file = 'R/functions/PrepareData.R')
-source('R/functions/VariantProgressionModel.R')
+source(file = 'R/functions/VariantsData.R')
+source(file = 'R/functions/VariantProgressionModel.R')
 source(file = 'R/functions/GraphsDelta.R')
 source(file = 'R/functions/GraphsPredominant.R')
 source(file = 'R/functions/GraphsStacks.R')
@@ -18,9 +18,11 @@ source(file = 'R/functions/GraphsStacks.R')
 #' Variants Data
 
 # Preparation: reading-in, ascertaining field data types and/or contents
-variants <- PrepareData()
+variants <- DataGet()
 str(object = variants)
 
+preview <- DataPreview(variants = variants)
+preview
 
 
 #' Section 3
