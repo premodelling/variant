@@ -8,7 +8,7 @@ InstallPackages <- function (){
   # A list of packages
   #   docstrings: roxygen
   #   latex: latex2exp
-  packages <- c('tidyverse', 'ggplot2', 'roxygen2', 'rmarkdown', 'latex2exp')
+  packages <- c('tidyverse', 'ggplot2', 'roxygen2', 'lubridate', 'rmarkdown', 'latex2exp', 'stringr')
 
   # Install
   .install <- function(x){
