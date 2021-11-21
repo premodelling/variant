@@ -1,0 +1,75 @@
+---
+title: "CHIC402/CHIC602 Coursework 2 - Variant Analysis"
+author: 36 ...
+output: 
+  pdf_document:
+    number_sections: true
+---
+
+
+<!--- Global Settings --->
+```{r include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+<!--- Libraries --->
+```{r include = FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+<!--- External Functions --->
+```{r include = FALSE}
+# Uploads functions DataGet & DataPreview
+sys.source(file = 'R/functions/VariantsData.R', envir = knitr::knit_global())
+
+sys.source(file = 'R/functions/GraphsDelta.R', envir = knitr::knit_global())
+```
+
+
+This project focuses on the analysis of the United Kingdom's genetically-typed SARS-CoV-2 infections data.  The data set summarises the weekly infections proportions of $17$ SARS-CoV-2 variants, starting from $31$ October 2021; the field `Other` consists of the pooled fractions of an unknown number of unnamed variants.
+
+
+## The Variants Data
+
+```{r include = FALSE}
+variants <- DataGet()
+preview <- DataPreview(variants = variants)
+```
+
+\vspace{20pt}
+
+```{r size = 'tiny', comment = '    '}
+str(variants, vec.len = 2)
+```
+
+\vspace{10pt}
+
+```{r  size = 'tiny', comment = '', results = 'asis'}
+# paste(preview$variant, collapse = ', ')
+```
+
+
+## An Exploration of Non-travel Data
+
+Each variant's weekly data consists of two records.  One represents the infections-fraction associated with known travel links (denoted *travel* in field `travel`), whilst the other represents the infections-fraction without known travel links (denoted *none* in field `travel`).
+
+```{r}
+# 3.0
+# The non-travel data only
+local <- variants %>%
+        dplyr::filter(travel == 'none')
+```
+
+
+```{r out.width = '65%', fig.align = 'center'}
+# 3.1.a
+# Delta proportions over time
+GraphsDelta(local = local)
+```
+
+
+
+
+
+
