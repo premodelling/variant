@@ -31,6 +31,10 @@ PrepareData <- function () {
   # Converting field 'travel' to Factor format
   variants$travel <- factor(x = variants$travel, ordered = FALSE)
 
+  # Ascending date order
+  variants %>%
+    arrange(week, travel)
+
   # Ascertaining that the sum of classification fractions = 1 per record
   fractions <- variants %>%
     dplyr::select(!c(week, travel)) %>%
