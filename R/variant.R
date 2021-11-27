@@ -1,6 +1,6 @@
 # Title     : Variant
 # Objective : Variant
-# Created by: Think
+# Created by: 36112985
 # Created on: 09/11/2021
 
 
@@ -104,10 +104,7 @@ vui21oct01 <- variants %>%
   select(week, 'VUI.21OCT.01')
 
 # Progression over time
-plot(vui21oct01$week, vui21oct01$VUI.21OCT.01,
-     type = "l", lty = 'solid', col = 'black', lwd = 1.0,
-     frame.plot = FALSE,
-     xlab = '', ylab = 'proportion', main = 'VUI.21OCT.01')
+# call ...
 
 # The variant progression model, and its predictions
 starting <- min(vui21oct01$week)
@@ -118,13 +115,7 @@ estimates <- VariantProgressionModel(starting = starting, period = period)
 estimates[estimates$date == '2021-09-01', c('date', 'prediction')]
 
 # Graph: VUI.21OCT.01 & predictions
-plot(x = vui21oct01$week, y = vui21oct01$VUI.21OCT.01,
-     ylim=c(min(vui21oct01$VUI.21OCT.01, estimates$prediction), max(vui21oct01$VUI.21OCT.01, estimates$prediction)),
-     xlim = c(min(vui21oct01$week, estimates$date), max(vui21oct01$week, estimates$date)),
-     type = "l", lty = 'solid', col = 'black', lwd = 2.5,
-     frame.plot = FALSE,
-     xlab = '', ylab = 'proportion', main = 'VUI.21OCT.01')
-points(x = estimates$date, y = estimates$prediction, pch = 19, cex = 0.5, col = scales::alpha(colour = 'grey', alpha = 0.25))
+# call ...
 
 # The first day of 2022
 estimates[estimates$date == '2022-01-01', c('date', 'prediction')]
