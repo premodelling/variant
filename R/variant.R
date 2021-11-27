@@ -8,6 +8,7 @@
 #' Functions
 source(file = 'R/functions/VariantsData.R')
 source(file = 'R/functions/VariantProgressionModel.R')
+source(file = 'R/functions/VariantsProportions.R')
 source(file = 'R/functions/GraphsDelta.R')
 source(file = 'R/functions/GraphsPredominant.R')
 source(file = 'R/functions/GraphsStacks.R')
@@ -18,11 +19,21 @@ source(file = 'R/functions/GraphsStacks.R')
 #' Variants Data
 
 # Preparation: reading-in, ascertaining field data types and/or contents
-variants <- DataGet()
+variants <- VariantsData()
 str(object = variants)
 
-preview <- DataPreview(variants = variants)
-preview
+variants[, 1:floor(ncol(variants)/2)] %>%
+  tibble() %>%
+  head(n = 3)
+
+
+# The melted form of 'variants'
+melted <- variants %>%
+  tidyr::gather(key = 'variant', value = 'fraction', -c(week, travel))
+
+# variant types, including 'Other'
+types <- names(x = variants)
+types <- types[ !(types %in% c('week', 'travel')) ]
 
 
 #' Section 3
@@ -53,33 +64,25 @@ peaks
 #' Graphs of Variant Proportions by Travel Category
 
 # 4.0
-# The melted form of 'variants'
-melted <- variants %>%
-  tidyr::gather(key = 'variant', value = 'fraction', -c(week, travel))
+proportions <- VariantsProportions(melted = melted)
+names(proportions)
+proportions$none
+proportions$travel
+proportions$leading
 
-# The leading 5 variants reponsible for the most infections during the period the data encompasses
-leading <- melted %>%
-  filter(variant != 'Other') %>%
-  group_by(variant) %>%
-  summarise(sum = sum(fraction)) %>%
-  slice_max(sum, n = 5)
-leading
-
-# Hence, their data
-predominant <- dplyr::left_join(x = leading[, 'variant'], y = melted, by = 'variant', keep = FALSE)
 
 
 # 4.1
 # GraphsPredominant
-PredominantVariants(predominant = predominant)
-PredominantVariantsZoom(predominant = predominant)
+PredominantVariants(predominant = proportions$leadingseries)
+PredominantVariantsZoom(predominant = proportions$leadingseries)
 
 
 # 4.2
 # The data for stacks of variant proportions, and the graphs
 stacksdata <- melted %>%
   mutate(segment = mapply(function (element, reference) if (element %in% reference) {element} else {'Other'},
-                          element =  variant, MoreArgs = list('reference' = leading$variant))) %>%
+                          element =  variant, MoreArgs = list('reference' = proportions$leading$variant))) %>%
   group_by(week, travel, segment) %>%
   summarise(proportion = sum(fraction), .groups = 'keep')
 StacksTravelYes(stacksdata = stacksdata)
