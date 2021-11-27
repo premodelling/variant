@@ -6,7 +6,10 @@ geometry: margin = 0.85in
 output: 
   pdf_document:
     number_sections: true
+header-includes:
+- \usepackage{subcaption}
 ---
+
 
 <!--- Global Settings --->
 ```{r include = FALSE}
@@ -17,6 +20,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r include = FALSE}
 library(dplyr)
 library(ggplot2)
+library(stringr)
 ```
 
 <!--- External Functions
@@ -82,6 +86,7 @@ local <- variants %>%
         dplyr::filter(travel == 'none')
 ```
 
+\vspace{10pt}
 
 \footnotesize
 
@@ -92,19 +97,23 @@ str(local, vec.len = 3, list.len = 5)
 
 \normalsize
 
-\vspace{10pt}
+\vspace{20pt}
 
 ## The Progression of Delta
 
 A variant of interest, amongst the variants that contribute to the non-travel infections quantities, is the **Delta** variant.  During the data's time span the largest proportion of non-travel infections was due to the Delta variant.
 
+\vspace{10pt}
+
 \footnotesize
 
 ```{r }
-knitr::kable(x = head(proportions$none), caption = 'The variants responsible for the 5 largest non-travel infections proportion',  booktabs = TRUE)
+knitr::kable(x = head(proportions$none), caption = 'The variants responsible for the 5 largest non-travel infections proportion')
 ```
 
 \normalsize
+
+\vspace{10pt}
 
 ```{r include = FALSE}
 maxima <- local[which.max(local$Delta), c('week', 'Delta')]
@@ -112,15 +121,15 @@ maxima <- local[which.max(local$Delta), c('week', 'Delta')]
 
 The graph of $fig. \: \ldots$ illustrates the weekly progression of Delta variant infections over time.  Each week's Delta fraction
 is a fraction of the week's total non-travel infections due to all recorded variants; named & `Other`.  Delta's
-fractions peak at {first(x = maxima$Delta)} on {first(x = maxima$week)}; hereafter, it seems that the Delta fraction values are continuously, but slowly, declining.
+fractions peak at `r round(first(x = maxima$Delta), digits = 3)` on `r first(x = maxima$week)`; hereafter, it seems that the Delta fraction values are continuously, but slowly, declining.
 
 <!--- Weekly Delta fractions over time --->
-```{r out.width = '65%', fig.align = 'center'}
+```{r fig.align = 'center', out.height = '65%', dpi = 85, fig.cap = 'The Weekly Non-Travel Delta Variant Infections Fractions Over Time'}
 # 3.1.a
 GraphsDelta(local = local)
 ```
 
-\vspace{10pt}
+\vspace{20pt}
 
 ## Variant Peaks
 
@@ -135,16 +144,20 @@ peaks <- local %>%
 
 In general, each variant has a fraction peak date w.r.t. the
 
-* data time span: `r starting` $\rightarrow$ `r ending`
+* data time span: *`r starting`* $\rightarrow$ $`r ending`$
 * non-travel data
 
-The five variants that have the largest peak date fractions are^[Note: `Other` is not a variant, it represents a collection of variants, therefore excluded.]
+The peak date of each variant, in descending peak-date--fraction order, is^[Note: `Other` is not a variant, it represents a collection of variants, therefore excluded.]
 
 \footnotesize
 
-<!--- the variants and their peak dates --->
 ```{r}
-knitr::kable(x = peaks, format = 'simple', digits = 3, caption = 'The variants responsible for the largest peak date fractions; w.r.t. data time span & non-travel data')
+# the variants and their peak dates
+knitr::kable(x = peaks[, c('variant', 'week', 'p')],
+             col.names = c('Variant', 'Peak Date', 'Peak Date Fraction'),
+             format = 'simple',
+             digits = 3,
+             caption = 'The variants responsible for the largest peak date fractions; w.r.t. data time span & non-travel data')
 ```
 
 \normalsize
@@ -153,16 +166,24 @@ knitr::kable(x = peaks, format = 'simple', digits = 3, caption = 'The variants r
 
 # Variant Proportions by Known/Unknown Travel Links
 
-During the whole data time span, the five variants responsible for the five largest variant-infection--proportions are
+During the whole data time span, the five variants responsible for the five largest variant-infection--proportions, w.r.t. known & unknown travel links, are
+
+\footnotesize
 
 ```{r}
 knitr::kable(x = proportions$leading, format = 'simple', col.names = c('Variant', 'Proportion'),
              caption = 'The variants responsible for the five largest variant-infection--proportions w.r.t. entire data time span')
 ```
 
+\normalsize
+
+\vspace{20pt}
+
+## The Predominant Variants
+
 The time series of each variant of $table \: \ldots$ is illustrated in $fig. \: \ldots$
 
-```{r}
+```{r out.width = '55%', fig.show = 'hold', fig.align = 'center', fig.subcap = c('original', 'zoom')}
 PredominantVariants(predominant = proportions$leadingseries)
 PredominantVariantsZoom(predominant = proportions$leadingseries)
 ```
