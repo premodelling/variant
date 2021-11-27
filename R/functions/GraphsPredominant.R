@@ -18,7 +18,7 @@ PredominantVariants <- function (predominant) {
           legend.title = element_text(),
           panel.grid.minor = element_blank(), panel.grid.major = element_line(size = 0.15)) +
     xlab('\n') +
-    ylab('Delta Variant Proportion\n') +
+    ylab('delta variant fraction\n') +
     scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y")
 
 }
@@ -37,7 +37,7 @@ PredominantVariantsZoom <- function (predominant) {
           legend.title = element_text(),
           panel.grid.minor = element_blank(), panel.grid.major = element_line(size = 0.15)) +
     xlab('\n') +
-    ylab('Delta Variant Proportion\n') +
+    ylab('delta variant fraction\n') +
     scale_x_date(date_breaks = "1 month", date_labels =  "%b %Y")
 
 }
