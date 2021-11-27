@@ -38,7 +38,7 @@ GraphsDelta <- function (local) {
     xlab('\n') +
     ylab('Delta Variant Fraction\n') +
     labs(caption = str_wrap(caption, width = 100) ) +
-    ggtitle(label = '\nThe Weekly Non-Travel Delta Variant Infections Fractions Over Time\n') +
+    # ggtitle(label = '\nThe Weekly Non-Travel Delta Variant Infections Fractions Over Time\n') +
     scale_x_date(date_breaks = "4 weeks", date_labels =  "%d %b %Y")
 
 }
