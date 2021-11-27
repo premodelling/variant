@@ -1,6 +1,6 @@
 # Title     : Graphs Delta
 # Objective : Illustrate the relative progression of Delta variant infections over time
-# Created by: Think
+# Created by: 36112985
 # Created on: 20 November 2021
 
 
