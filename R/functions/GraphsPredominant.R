@@ -1,6 +1,6 @@
-# Title     : TODO
-# Objective : TODO
-# Created by: Think
+# Title     : Graphs Predominant
+# Objective : Time series curves for the 5 variants whose fractions dominate the variants data
+# Created by: 36112985
 # Created on: 20/11/2021
 
 PredominantVariants <- function (predominant) {
