@@ -24,6 +24,25 @@ including a bar for “Other” such that the weekly proportions sum to one agai
 <br>
 <br>
 
+### Notes
+
+The first occurrence of a non-zero fraction w.r.t. the data available; the data frame must be in date order.
+
+```r
+  # The list/vector of variant types
+  types <- names(x = variants)
+  types <- types[ !(types %in% c('week', 'travel')) ]
+
+  appears <- function (x) {
+    starting <- head(variants[which(variants[x] > 0), 'week'], 1)
+    return(c('variant' = x, '1st fraction > 0' = as.character(starting)))
+  }
+  datavariants <- dplyr::bind_rows(lapply(X = types, FUN = appears))
+```
+
+<br>
+<br>
+
 ### References
 
 * [dplyr::select](https://dplyr.tidyverse.org/reference/select.html)
