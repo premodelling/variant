@@ -33,6 +33,7 @@ sys.source(file = 'R/functions/VariantsData.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/GraphsDelta.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/VariantsProportions.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/GraphsPredominant.R', envir = knitr::knit_global())
+sys.source(file = 'R/functions/GraphsStacks.R', envir = knitr::knit_global())
 ```
 
 <!--- The data --->
@@ -165,6 +166,7 @@ knitr::kable(x = peaks[, c('variant', 'week', 'p')],
 \vspace{35pt}
 
 # Variant Proportions by Known/Unknown Travel Links
+<! --- 4 --->
 
 During the whole data time span, the five variants responsible for the five largest variant-infection--proportions, w.r.t. known & unknown travel links, are
 
@@ -180,10 +182,61 @@ knitr::kable(x = proportions$leading, format = 'simple', col.names = c('Variant'
 \vspace{20pt}
 
 ## The Predominant Variants
+<!--- 4.1 --->
 
-The time series of each variant of $table \: \ldots$ is illustrated in $fig. \: \ldots$
+The time series of each variant of $table \: \ldots$ is illustrated in $fig. \: \ldots$.  the second graph has a rescaled ordinate axis, which makes it easier to observe the progression of low-fractions curves.  A few observations:
+
+* **In relation to infections with known travel links**, the Alpha variant dominated initially, but the Beta & Eta fractions are fairly substantive.  During May 2021 the Delta variant overtook the Alpha variant - from May 2021, until the end of the data's time span, the Delta variant had the largest infections-fraction each week.  By the end of the period (a) the Alpha variant barely contributes to each week's travel linked infections, and (b) the fractional contributions of VUI.21OCT.01 are increasing each week.
+
+* **In relation to infections without known travel links**, again the Alpha variant dominated initially, and quite comprehensively; the Beta & Eta variants contribute small fractions.  However, from May 2021 onward the Delta variant had the largest infections-fraction each week.  In line with
 
 ```{r out.width = '55%', fig.show = 'hold', fig.align = 'center', fig.subcap = c('original', 'zoom')}
 PredominantVariants(predominant = proportions$leadingseries)
 PredominantVariantsZoom(predominant = proportions$leadingseries)
 ```
+
+
+\vspace{20pt}
+
+## Progression Patterns
+<!--- 4.2 & 4.3 --->
+
+```{r include = FALSE}
+stacksdata <- melted %>%
+        mutate(segment = mapply(function (element, reference) if (element %in% reference) {element} else {'Other'},
+                                element =  variant, MoreArgs = list('reference' = proportions$leading$variant))) %>%
+        group_by(week, travel, segment) %>%
+        summarise(proportion = sum(fraction), .groups = 'keep')
+```
+
+The graph of ...
+
+```{r fig.align = 'center'}
+StacksTravelYes(stacksdata = stacksdata)
+```
+
+
+On the other hand ...
+
+```{r fig.align = 'center'}
+StacksTravelNo(stacksdata = stacksdata)
+```
+
+
+\vspace{35pt}
+
+# The New Variant
+<!--- 5 --->
+
+```{r include = FALSE}
+# VUI.21OCT.01 Data
+vui21oct01 <- variants %>%
+        filter(travel == 'none') %>%
+        select(week, 'VUI.21OCT.01')
+```
+
+
+
+
+
+
