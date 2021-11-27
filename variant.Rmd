@@ -1,6 +1,6 @@
 ---
 title: "CHIC402/CHIC602 Coursework 2 - Variant Analysis"
-author: 36 ...
+author: 36112985
 fontsize: 12pt
 geometry: margin = 0.85in
 output: 
