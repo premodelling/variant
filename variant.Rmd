@@ -21,6 +21,8 @@ knitr::opts_chunk$set(echo = FALSE)
 library(dplyr)
 library(ggplot2)
 library(stringr)
+library(lubridate)
+library(latex2exp)
 ```
 
 <!--- External Functions
@@ -29,11 +31,13 @@ GraphsDelta: For Section 3.1a
 VariantsProportions:
 --->
 ```{r include = FALSE}
+sys.source(file = 'R/functions/VariantProgressionModel.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/VariantsData.R', envir = knitr::knit_global())
-sys.source(file = 'R/functions/GraphsDelta.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/VariantsProportions.R', envir = knitr::knit_global())
+sys.source(file = 'R/functions/GraphsDelta.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/GraphsPredominant.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/GraphsStacks.R', envir = knitr::knit_global())
+sys.source(file = 'R/functions/GraphsVUI21OCT01.R', envir = knitr::knit_global())
 ```
 
 <!--- The data --->
@@ -211,14 +215,14 @@ stacksdata <- melted %>%
 
 The graph of ...
 
-```{r fig.align = 'center'}
+```{r out.width = '45%', fig.align = 'center'}
 StacksTravelYes(stacksdata = stacksdata)
 ```
 
 
 On the other hand ...
 
-```{r fig.align = 'center'}
+```{r out.width = '45%', fig.align = 'center'}
 StacksTravelNo(stacksdata = stacksdata)
 ```
 
@@ -228,6 +232,8 @@ StacksTravelNo(stacksdata = stacksdata)
 # The New Variant
 <!--- 5 --->
 
+This chapter focuses on non-travel VUI.21OCT.01 variant data; the variable **vui21oct01** stores this data.
+
 ```{r include = FALSE}
 # VUI.21OCT.01 Data
 vui21oct01 <- variants %>%
@@ -236,7 +242,48 @@ vui21oct01 <- variants %>%
 ```
 
 
+## Non-travel VUI.21OCT.01 Cases Over Time
+
+```{r out.width = '45%', fig.align = 'center'}
+ProgressionVUI21OCT01(vui21oct01 = vui21oct01)
+```
+
+
+## A Prediction Model
 
 
 
+An exponential growth model, for predicting daily infection fractions, has been developed.  The model is
 
+$$p = e^{(d\beta + \alpha)}$$
+
+wherein
+
+* $\alpha = -526.0385$
+* $\beta = 0.0277$
+* $d \rightarrow  \text{days since 1970-01-01}$
+
+The function $VariantProgressionModel( )$ uses this model to predict daily infection fractions w.r.t. (a) a start date, and (b) a length of time.  The variable **estimates** stores the predictions w.r.t. an entire year, starting from the starting date of the non-travel VUI.21OCT.01 data.
+
+```{r}
+starting <- min(vui21oct01$week)
+period <- lubridate::years(x = 1)
+estimates <- VariantProgressionModel(starting = starting, period = period)
+
+selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'prediction')],
+             estimates[estimates$date == '2022-01-01', c('date', 'prediction')])
+```
+
+The predictions for *1 September 2021* & *1 January 2022* can be extracted from **estimates** ($table \ldots$).  The 1 January 2022 prediction is implausible because $`r first(x = selections[selections$date == '2022-01-01', 'prediction'])`$ > 1; herein, a prediction should not exceed 1, and it can only be one if, and only if, no other variant exist.
+
+```{r}
+knitr::kable(x = selections, digits = 3, format = 'simple', caption = 'Predictions for 1 September 2021 & 1 January 2022')
+```
+
+
+
+## Prediction Curve
+
+```{r out.width = '45%', fig.align = 'center'}
+PredictionsVUI21OCT01(vui21oct01 = vui21oct01, estimates = estimates)
+```
