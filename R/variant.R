@@ -12,6 +12,7 @@ source(file = 'R/functions/VariantsProportions.R')
 source(file = 'R/functions/GraphsDelta.R')
 source(file = 'R/functions/GraphsPredominant.R')
 source(file = 'R/functions/GraphsStacks.R')
+source(file = 'R/functions/GraphsVUI21OCT01.R')
 
 
 
@@ -104,7 +105,7 @@ vui21oct01 <- variants %>%
   select(week, 'VUI.21OCT.01')
 
 # Progression over time
-# call ...
+ProgressionVUI21OCT01(vui21oct01 = vui21oct01)
 
 # The variant progression model, and its predictions
 starting <- min(vui21oct01$week)
@@ -115,8 +116,11 @@ estimates <- VariantProgressionModel(starting = starting, period = period)
 estimates[estimates$date == '2021-09-01', c('date', 'prediction')]
 
 # Graph: VUI.21OCT.01 & predictions
-# call ...
+PredictionsVUI21OCT01(vui21oct01 = vui21oct01, estimates = estimates)
 
 # The first day of 2022
 estimates[estimates$date == '2022-01-01', c('date', 'prediction')]
 
+# Or
+selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'prediction')],
+                    estimates[estimates$date == '2022-01-01', c('date', 'prediction')])
