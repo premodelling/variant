@@ -1,22 +1,18 @@
 ---
 title: "CHIC402/CHIC602 Coursework 2 - Variant Analysis"
 author: 36112985
-fontsize: 12pt
-geometry: margin = 0.85in
 output: 
   pdf_document:
     number_sections: true
-header-includes:
-- \usepackage{subcaption}
 ---
 
 
-<!--- Global Settings --->
+<!--- global Settings --->
 ```{r include = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-<!--- Libraries --->
+<!--- libraries --->
 ```{r include = FALSE}
 library(dplyr)
 library(ggplot2)
@@ -26,9 +22,7 @@ library(latex2exp)
 ```
 
 <!--- External Functions
-VariantsData: Reads-in and inspects the data of variant_travel.csv
-GraphsDelta: For Section 3.1a
-VariantsProportions:
+The set of [custom] external functions used by this document.
 --->
 ```{r include = FALSE}
 sys.source(file = 'R/functions/VariantProgressionModel.R', envir = knitr::knit_global())
@@ -40,43 +34,96 @@ sys.source(file = 'R/functions/GraphsStacks.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/GraphsVUI21OCT01.R', envir = knitr::knit_global())
 ```
 
-<!--- The data --->
+<!--- the data --->
 ```{r include = FALSE}
+# Reading-in the variants data
 variants <- VariantsData()
-melted <- variants %>%
-        tidyr::gather(key = 'variant', value = 'fraction', -c(week, travel))
 
+# The time span of the variants' data set
 starting <- min(variants$week)
 ending <- max(variants$week)
 ```
 
 
-\textcolor[rgb]{0.3, 0.3, 0.3}{This project focuses on the analysis of the United Kingdom's genetically-typed SARS-CoV-2 infections data.  The data set summarises the weekly infections fractions of $17$ SARS-CoV-2 variants, starting $`r starting`$, and ending $`r ending`$; additionally, there's the field `Other`, each value of this field represents a pooled fraction w.r.t. (with respect to) an unknown number of unnamed variants.}
+This project focuses on the analysis of the United Kingdom's genetically-typed SARS-CoV-2 infections data.  The data set summarises the weekly infections fractions of $17$ SARS-CoV-2 variants, starting *`r starting`*, and ending *`r ending`*; additionally, there's the field \textcolor[rgb]{0.54, 0.25, 0.27}{\emph{Other}}, each value of this field represents a pooled fraction w.r.t. (with respect to) an unknown number of unnamed variants.
 
-\vspace{35pt}
+Each week has 2 fractions records: one for cases associated with known travel links, the other without.  Each week's sum of the $18$ infections fractions - due to the $17$ named SARS-CoV-2 variants & \textcolor[rgb]{0.54, 0.25, 0.27}{\emph{Other}} - is **1** per travel ...
+
+\vspace{20pt}
 
 # The Data
 
-The variants' data is read-in and inspected via function $DataGet(\;)$, and stored in the data frame variable **variants**.  The variable **melted** stores the melted form of **variants**.  The number of instances, and the features, of **variants**  are
+In this document the data frame variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{variants}} stores the variants' data set.  It consists of
 
 \vspace{10pt}
 
-\footnotesize
+\small
 
 ```{r comment = '         '}
-# the description of the variants data set stored in variable variants
+# The description of the variants data set
 str(variants, vec.len = 3)
+```
+
+\normalsize
+
+\vspace{20pt}
+
+**Long Format**
+
+Some parts of this document use the long form of data frame *variants*.  The variable *melted* stores the long form of data frame variable *variants*.
+
+\small
+```{r  comment = '         ', echo = TRUE}
+  # The long form of data frame 'variants'
+  melted <- variants %>%
+          tidyr::gather(key = 'variant', value = 'fraction', -c(week, travel))
+```
+\normalsize
+
+Its structure is
+
+\small
+```{r comment = '         '}
+  # The description of melted
+  str(melted, vec.len = 3)
+```
+\normalsize
+
+
+
+\vspace{20pt}
+
+**Infections Proportions Statistics**
+
+Different parts of this document use infections proportion statistics.  Infections proportion statistics, by variant, are calculated by function *VariantsProportions( )*, and summarised in named-list variable *proportions*.
+
+\vspace{10pt}
+
+\small
+```{r echo = TRUE}
+  # Infections proportion statistics
+  proportions <- VariantsProportions(melted = melted)
+```
+\normalsize
+
+\vspace{10pt}
+
+The contents of *proportions* are discussed in detail at appropriate points in this document.  In brief, *proportions* consists of four data frames: *none*, *travel*, *leading*, *leadingseries*.
+
+\vspace{10pt}
+
+\small
+
+```{r comment = '         ', echo = TRUE}
+  # The contents of the named-list variable 'proportions'; each is a  data frame.
+  names(proportions)
 ```
 
 \normalsize
 
 \vspace{10pt}
 
-Infection proportion statistics, by variant, are calculated by function $VariantsProportions(\;)$, and summarised in named-list variable **proportions**. The contents of **proportions** are discussed in detail at appropriate points in this document.  In brief, **proportions** consists of four data frames: *none*, *travel*, *leading*, *leadingseries*.  The data frame *none* summarises the total contribution of each variant w.r.t. that data's time span ($`r starting` \rightarrow `r ending`$); similarly for *travel*.  The data frame *leading* lists the 5 variants responsible for the most infections (w.r.t. travel & non-travel) during the data's time span; *leadingseries* stores the infections' data of these five.
-
-```{r include = FALSE}
-proportions <- VariantsProportions(melted = melted)
-```
+The data frame *none* summarises the total contribution of each variant w.r.t. that data's time span ($`r starting` \rightarrow `r ending`$); similarly for *travel*.  The data frame *leading* lists the 5 variants responsible for the most infections (w.r.t. travel & non-travel) during the data's time span; *leadingseries* stores the infections' data of these five.
 
 \vspace{35pt}
 
