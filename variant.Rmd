@@ -34,6 +34,7 @@ sys.source(file = 'R/functions/GraphsStacks.R', envir = knitr::knit_global())
 sys.source(file = 'R/functions/GraphsVUI21OCT01.R', envir = knitr::knit_global())
 ```
 
+
 <!--- the data --->
 ```{r include = FALSE}
 # Reading-in the variants data
@@ -47,7 +48,7 @@ ending <- max(variants$week)
 
 This project focuses on the analysis of the United Kingdom's genetically-typed SARS-CoV-2 infections data.  The data set summarises the weekly infections fractions of $17$ SARS-CoV-2 variants, starting *`r starting`*, and ending *`r ending`*; additionally, there's the field \textcolor[rgb]{0.54, 0.25, 0.27}{\emph{Other}}, each value of this field represents a pooled fraction w.r.t. (with respect to) an unknown number of unnamed variants.
 
-Each week has 2 fractions records: one for cases associated with known travel links, the other without.  Each week's sum of the $18$ infections fractions - due to the $17$ named SARS-CoV-2 variants & \textcolor[rgb]{0.54, 0.25, 0.27}{\emph{Other}} - is **1** per travel ...
+Each week has 2 fractions records: one for cases associated with known travel links, the other without.  The sum of each record's $18$ infections fractions is **1**.
 
 \vspace{20pt}
 
@@ -68,9 +69,9 @@ str(variants, vec.len = 3)
 
 \vspace{20pt}
 
-**Long Format**
+## Long Format
 
-Some parts of this document use the long form of data frame *variants*.  The variable *melted* stores the long form of data frame variable *variants*.
+Some parts of this document use the long form of \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{variants}}, stored by the variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{melted}}.
 
 \small
 ```{r  comment = '         ', echo = TRUE}
@@ -80,7 +81,7 @@ Some parts of this document use the long form of data frame *variants*.  The var
 ```
 \normalsize
 
-Its structure is
+The structure of \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{melted}} is
 
 \small
 ```{r comment = '         '}
@@ -89,13 +90,11 @@ Its structure is
 ```
 \normalsize
 
-
-
 \vspace{20pt}
 
-**Infections Proportions Statistics**
+## Infections Proportion Statistics by Variant
 
-Different parts of this document use infections proportion statistics.  Infections proportion statistics, by variant, are calculated by function *VariantsProportions( )*, and summarised in named-list variable *proportions*.
+Parts of this document depend on infections proportion statistics by variant.  The function *VariantsProportions( )* calculates the statistics.  In the code snippet below \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} stores the calculations.
 
 \vspace{10pt}
 
@@ -108,7 +107,7 @@ Different parts of this document use infections proportion statistics.  Infectio
 
 \vspace{10pt}
 
-The contents of *proportions* are discussed in detail at appropriate points in this document.  In brief, *proportions* consists of four data frames: *none*, *travel*, *leading*, *leadingseries*.
+the variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} is a named list.  The elements of \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} are discussed in detail at appropriate points in this document.  In brief, \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} consists of four data frames:
 
 \vspace{10pt}
 
@@ -123,46 +122,49 @@ The contents of *proportions* are discussed in detail at appropriate points in t
 
 \vspace{10pt}
 
-The data frame *none* summarises the total contribution of each variant w.r.t. that data's time span ($`r starting` \rightarrow `r ending`$); similarly for *travel*.  The data frame *leading* lists the 5 variants responsible for the most infections (w.r.t. travel & non-travel) during the data's time span; *leadingseries* stores the infections' data of these five.
+The data frame *none* summarises the total contribution of each variant w.r.t. **(a)** infections without known travel links, and **(b)** the data's time span (*`r starting`* $\rightarrow$ *`r ending`*); the same logic applies to *travel*, for infections with travel links.
 
-\vspace{35pt}
+The data frame *leading* lists the 5 variants responsible for the most infections, w.r.t. both travel & non-travel linked infections, during the data's time span; *leadingseries* stores the infections' data of these five.
+
+
+\pagebreak
+
 
 # An Exploration of Non-travel Data
 
-Each variant's weekly data consists of two records.  One represents the infections-fraction associated with known travel links (denoted *travel* in field $travel$), whilst the other represents the infections-fraction without known travel links (denoted *none* in field $travel$).  This section focuses on non-travel data, and the variable **local** stores the applicable data.  The truncated data description highlights the number of non-travel data records.
+Each variant's weekly data consists of two records.  One represents the infections-fractions associated with known travel links (denoted *travel* in field \textcolor[rgb]{0.54, 0.25, 0.27}{\emph{travel}}), whilst the other represents the infections-fractions without known travel links (denoted *none* in field \textcolor[rgb]{0.54, 0.25, 0.27}{\emph{travel}}).  This section focuses on non-travel data, and the variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{local}} stores the applicable data.
 
-```{r}
-# 3.0
-# The non-travel data only
-local <- variants %>%
-        dplyr::filter(travel == 'none')
+\small
+```{r echo = TRUE}
+  # 3.0
+  # The non-travel data only
+  local <- variants %>%
+          dplyr::filter(travel == 'none')
 ```
+\normalsize
 
-\vspace{10pt}
+The truncated data description highlights the number of non-travel data records.
 
-\footnotesize
-
-```{r size = 'tiny', comment = '          '}
+\small
+```{r comment = '          '}
 # A preview of variable 'local'
 str(local, vec.len = 3, list.len = 5)
 ```
-
 \normalsize
+
 
 \vspace{20pt}
 
-## The Progression of Delta
+## The Progression of Delta (non-travel)
 
-A variant of interest, amongst the variants that contribute to the non-travel infections quantities, is the **Delta** variant.  During the data's time span the largest proportion of non-travel infections was due to the Delta variant.
+A variant of interest, amongst the variants that contribute to the non-travel infections quantities, is the **Delta** variant.  During the data's time span the largest proportion of non-travel infections was due to the Delta variant (*Table 1*).
 
 \vspace{10pt}
 
-\footnotesize
-
+\small
 ```{r }
 knitr::kable(x = head(proportions$none), caption = 'The variants responsible for the 5 largest non-travel infections proportion')
 ```
-
 \normalsize
 
 \vspace{10pt}
@@ -171,63 +173,83 @@ knitr::kable(x = head(proportions$none), caption = 'The variants responsible for
 maxima <- local[which.max(local$Delta), c('week', 'Delta')]
 ```
 
-The graph of $fig. \: \ldots$ illustrates the weekly progression of Delta variant infections over time.  Each week's Delta fraction
-is a fraction of the week's total non-travel infections due to all recorded variants; named & `Other`.  Delta's
+The graph of *Fig. 1* illustrates the progression of Delta variant infections over time.  Each week's Delta fraction
+is a fraction of the week's total non-travel infections due to all recorded variants; named and otherwise.  Delta's
 fractions peak at `r round(first(x = maxima$Delta), digits = 3)` on `r first(x = maxima$week)`; hereafter, it seems that the Delta fraction values are continuously, but slowly, declining.
 
 <!--- Weekly Delta fractions over time --->
-```{r fig.align = 'center', out.height = '65%', dpi = 85, fig.cap = 'The Weekly Non-Travel Delta Variant Infections Fractions Over Time'}
+```{r fig.align = 'center', out.width = '65%', fig.cap = 'The Weekly Non-Travel Delta Variant Infections Fractions Over Time'}
 # 3.1.a
 GraphsDelta(local = local)
 ```
 
-\vspace{20pt}
+\vspace{35pt}
 
-## Variant Peaks
-
-```{r include = FALSE}
-peaks <- local %>%
-        select(!(travel)) %>%
-        tidyr::gather(key = 'variant', value = 'p', -week) %>%
-        group_by(variant) %>%
-        slice(which.max(p)) %>%
-        arrange(desc(p))
-```
+## Variant Peaks (non-travel)
 
 In general, each variant has a fraction peak date w.r.t. the
 
-* data time span: *`r starting`* $\rightarrow$ $`r ending`$
+* data's time span: *`r starting`* $\rightarrow$ *`r ending`*
 * non-travel data
 
-The peak date of each variant, in descending peak-date--fraction order, is^[Note: `Other` is not a variant, it represents a collection of variants, therefore excluded.]
+The snippet below determines the peak date of each variant, and arranges the variants in descending peak-date fraction order.
 
-\footnotesize
+\vspace{10pt}
 
+\small
+```{r echo = TRUE}
+  peaks <- local %>%
+          select(!(travel)) %>%
+          tidyr::gather(key = 'variant', value = 'p', -week) %>%
+          group_by(variant) %>%
+          slice(which.max(p)) %>%
+          arrange(desc(p))
+```
+\normalsize
+
+\vspace{10pt}
+
+Hence, *Table 2* lists the peak date & peak-date fraction per variant.^[Note: `Other` is not a variant, it represents a collection of variants, therefore excluded.]
+
+\small
 ```{r}
 # the variants and their peak dates
 knitr::kable(x = peaks[, c('variant', 'week', 'p')],
              col.names = c('Variant', 'Peak Date', 'Peak Date Fraction'),
              format = 'simple',
              digits = 3,
-             caption = 'The variants responsible for the largest peak date fractions; w.r.t. data time span & non-travel data')
+             caption = 'The peak date and peak-date fractions; descending fraction order')
 ```
-
 \normalsize
 
 \vspace{35pt}
 
 # Variant Proportions by Known/Unknown Travel Links
-<! --- 4 --->
+<!--- 4 --->
 
-During the whole data time span, the five variants responsible for the five largest variant-infection--proportions, w.r.t. known & unknown travel links, are
+The section *Infections Proportion Statistics by Variant* calculates a few variant proportions, and stores the results in named-list variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}}.  The \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} data frame element *leading*
 
-\footnotesize
+\vspace{10pt}
 
+\small
+```{r comment = '         ', echo = TRUE}
+  # The contents of the named-list variable 'proportions'; each is a  data frame.
+  names(proportions)
+```
+\normalsize
+
+\vspace{10pt}
+
+lists the five variants responsible for the five largest variant-infection--proportions, w.r.t. **(a)** known & unknown travel links, and **(b)** the data's time span; *Table 3*.
+
+\vspace{10pt}
+
+\small
 ```{r}
+# Refer to section Infections Proportion Statistics by Variant
 knitr::kable(x = proportions$leading, format = 'simple', col.names = c('Variant', 'Proportion'),
              caption = 'The variants responsible for the five largest variant-infection--proportions w.r.t. entire data time span')
 ```
-
 \normalsize
 
 \vspace{20pt}
@@ -235,13 +257,17 @@ knitr::kable(x = proportions$leading, format = 'simple', col.names = c('Variant'
 ## The Predominant Variants
 <!--- 4.1 --->
 
-The time series of each variant of $table \: \ldots$ is illustrated in $fig. \: \ldots$.  the second graph has a rescaled ordinate axis, which makes it easier to observe the progression of low-fractions curves.  A few observations:
+The time series of each variant of *Table 3* is illustrated in *Fig.*.  The second graph has a rescaled *y-axis*, which makes it easier to observe the progression of curves that have small fraction values.  A few observations:
 
 * **In relation to infections with known travel links**, the Alpha variant dominated initially, but the Beta & Eta fractions are fairly substantive.  During May 2021 the Delta variant overtook the Alpha variant - from May 2021, until the end of the data's time span, the Delta variant had the largest infections-fraction each week.  By the end of the period (a) the Alpha variant barely contributes to each week's travel linked infections, and (b) the fractional contributions of VUI.21OCT.01 are increasing each week.
 
+\vspace{5pt}
+
 * **In relation to infections without known travel links**, again the Alpha variant dominated initially, and quite comprehensively; the Beta & Eta variants contribute small fractions.  However, from May 2021 onward the Delta variant had the largest infections-fraction each week.  In line with
 
-```{r out.width = '55%', fig.show = 'hold', fig.align = 'center', fig.subcap = c('original', 'zoom')}
+\vspace{20pt}
+
+```{r out.width = '59%', fig.show = 'hold', fig.align = 'center', fig.cap = "Weekly fraction proportions of the predominant variants listed in Table 3; w.r.t. (a) travel and non-travel infections, and (b) the data's time span.  The second/bottom graph has a rescaled y-axis, which makes it easier to observe the progression of curves that have small fraction values."}
 PredominantVariants(predominant = proportions$leadingseries)
 PredominantVariantsZoom(predominant = proportions$leadingseries)
 ```
@@ -260,21 +286,22 @@ stacksdata <- melted %>%
         summarise(proportion = sum(fraction), .groups = 'keep')
 ```
 
-The graph of ...
+The graphs of ... illustrate how variants dominated peaked, etc. ...
 
-```{r out.width = '45%', fig.align = 'center'}
+\vspace{10pt}
+
+```{r out.width = '45%', fig.align = 'center', fig.cap = 'Progression w.r.t. travel-linked infections'}
 StacksTravelYes(stacksdata = stacksdata)
 ```
 
+\vspace{10pt}
 
-On the other hand ...
-
-```{r out.width = '45%', fig.align = 'center'}
+```{r out.width = '45%', fig.align = 'center', fig.cap = 'Infection fractions, without known travel links, over time'}
 StacksTravelNo(stacksdata = stacksdata)
 ```
 
 
-\vspace{35pt}
+\pagebreak
 
 # The New Variant
 <!--- 5 --->
@@ -297,8 +324,6 @@ ProgressionVUI21OCT01(vui21oct01 = vui21oct01)
 
 
 ## A Prediction Model
-
-
 
 An exponential growth model, for predicting daily infection fractions, has been developed.  The model is
 
