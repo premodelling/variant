@@ -227,7 +227,7 @@ knitr::kable(x = peaks[, c('variant', 'week', 'p')],
 # Variant Proportions by Known/Unknown Travel Links
 <!--- 4 --->
 
-The section *Infections Proportion Statistics by Variant* calculates a few variant proportions, and stores the results in named-list variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}}.  The \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} data frame element *leading*
+The section *Infections Proportion Statistics by Variant* calculates a few variant proportions, and stores the results in named-list variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}}.
 
 \vspace{10pt}
 
@@ -240,7 +240,7 @@ The section *Infections Proportion Statistics by Variant* calculates a few varia
 
 \vspace{10pt}
 
-lists the five variants responsible for the five largest variant-infection--proportions, w.r.t. **(a)** known & unknown travel links, and **(b)** the data's time span; *Table 3*.
+The \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} data frame element *leading* lists the five variants responsible for the five largest variant-infection--proportions, w.r.t. **(a)** known & unknown travel links, and **(b)** the data's time span; *Table 3*.
 
 \vspace{10pt}
 
@@ -267,8 +267,12 @@ The time series of each variant of *Table 3* is illustrated in *Fig.*.  The seco
 
 \vspace{20pt}
 
-```{r out.width = '59%', fig.show = 'hold', fig.align = 'center', fig.cap = "Weekly fraction proportions of the predominant variants listed in Table 3; w.r.t. (a) travel and non-travel infections, and (b) the data's time span.  The second/bottom graph has a rescaled y-axis, which makes it easier to observe the progression of curves that have small fraction values."}
+```{r out.width = '57%', fig.align = 'center', fig.cap = "Weekly fraction proportions of the predominant variants listed in Table 3; w.r.t. (a) travel and non-travel infections, and (b) the data's time span.  For a better view of the curves with generally small fractions, refer to Fig. 3; it is a version of this graph with a re-scaled y-axis. "}
 PredominantVariants(predominant = proportions$leadingseries)
+
+```
+
+```{r out.width = '57%', fig.align = 'center', fig.cap = "A version of Fig. 2 wherein the y-axis has been re-scaled, this makes it easier to observe the progression of curves that have generally small fraction values."}
 PredominantVariantsZoom(predominant = proportions$leadingseries)
 ```
 
@@ -278,6 +282,12 @@ PredominantVariantsZoom(predominant = proportions$leadingseries)
 ## Progression Patterns
 <!--- 4.2 & 4.3 --->
 
+During the data set's time span Alpha initially dominated travel-linked & non-travel--linked infections.  Its dominance is much more pronounced in the non-travel graph.
+
+By May 2021 Delta starts contributing the largest weekly travel & non-travel infection fractions.  The total travel & non-travel infection proportions due to Delta are quite similar.  The fractions contributed by Delta continuously increase until the weekly fractions of VUI.21OCT.01 start becoming prominent.  Thus far, the weekly travel-linked & non-travel--linked infection fractions of VUI.21OCT.01 have been relatively low.
+
+The infections due to Beta, and those of Other (12 variants + Other), are predominantly travel linked.
+
 ```{r include = FALSE}
 stacksdata <- melted %>%
         mutate(segment = mapply(function (element, reference) if (element %in% reference) {element} else {'Other'},
@@ -286,7 +296,6 @@ stacksdata <- melted %>%
         summarise(proportion = sum(fraction), .groups = 'keep')
 ```
 
-The graphs of ... illustrate how variants dominated peaked, etc. ...
 
 \vspace{10pt}
 
@@ -306,15 +315,16 @@ StacksTravelNo(stacksdata = stacksdata)
 # The New Variant
 <!--- 5 --->
 
-This chapter focuses on non-travel VUI.21OCT.01 variant data; the variable **vui21oct01** stores this data.
+This chapter focuses on non-travel VUI.21OCT.01 variant data; the variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{vui21oct01}} stores this data.
 
-```{r include = FALSE}
-# VUI.21OCT.01 Data
+\small
+```{r echo = TRUE}
+# the non-travel VUI.21OCT.01 Data
 vui21oct01 <- variants %>%
         filter(travel == 'none') %>%
         select(week, 'VUI.21OCT.01')
 ```
-
+\normalsize
 
 ## Non-travel VUI.21OCT.01 Cases Over Time
 
@@ -335,24 +345,25 @@ wherein
 * $\beta = 0.0277$
 * $d \rightarrow  \text{days since 1970-01-01}$
 
-The function $VariantProgressionModel( )$ uses this model to predict daily infection fractions w.r.t. (a) a start date, and (b) a length of time.  The variable **estimates** stores the predictions w.r.t. an entire year, starting from the starting date of the non-travel VUI.21OCT.01 data.
+The function *VariantProgressionModel( )* uses this model to predict daily infection fractions w.r.t. **(a)** a start date, and **(b)** a length of time.  The variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{estimates}} stores the predictions w.r.t. an entire year, starting from the starting date of the non-travel VUI.21OCT.01 data.
 
-```{r}
+\small
+```{r echo = TRUE}
 starting <- min(vui21oct01$week)
 period <- lubridate::years(x = 1)
 estimates <- VariantProgressionModel(starting = starting, period = period)
-
-selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'prediction')],
-             estimates[estimates$date == '2022-01-01', c('date', 'prediction')])
 ```
+\normalsize
 
-The predictions for *1 September 2021* & *1 January 2022* can be extracted from **estimates** ($table \ldots$).  The 1 January 2022 prediction is implausible because $`r first(x = selections[selections$date == '2022-01-01', 'prediction'])`$ > 1; herein, a prediction should not exceed 1, and it can only be one if, and only if, no other variant exist.
+The predictions for *1 September 2021* & *1 January 2022* are extracted from \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{estimates}}; *Table 4*  summarises the results.  The 1 January 2022 prediction is implausible because it is > 1; herein, a prediction should not exceed 1 because it is a fraction, and it can only equal 1 if, and only if, no other variant exist.
 
 ```{r}
+selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'prediction')],
+                    estimates[estimates$date == '2022-01-01', c('date', 'prediction')])
 knitr::kable(x = selections, digits = 3, format = 'simple', caption = 'Predictions for 1 September 2021 & 1 January 2022')
 ```
 
-
+\vspace{20pt}
 
 ## Prediction Curve
 
