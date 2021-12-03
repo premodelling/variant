@@ -99,6 +99,17 @@ StacksTravelNo(stacksdata = stacksdata)
 #' 5
 #' New Variant Increase
 
+variants %>%
+  select(week, travel, "VUI.21OCT.01") %>%
+  filter(travel == 'none' & `VUI.21OCT.01` > 0) %>%
+  slice(which.min(week))
+
+variants %>%
+  select(week, travel, "VUI.21OCT.01") %>%
+  filter( (travel == 'travel' & `VUI.21OCT.01` > 0) ) %>%
+  slice(which.min(week))
+
+
 # VUI.21OCT.01 Data
 vui21oct01 <- variants %>%
   filter(travel == 'none') %>%
