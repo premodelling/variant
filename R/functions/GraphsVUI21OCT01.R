@@ -6,11 +6,19 @@
 #' @param vui21oct01:
 ProgressionVUI21OCT01 <- function (vui21oct01) {
 
-  plot(vui21oct01$week, vui21oct01$VUI.21OCT.01,
-       type = "l", lty = 'solid', col = 'black', lwd = 1.0,
-       frame.plot = FALSE,
-       xlab = '', ylab = 'fraction', main = 'VUI.21OCT.01 Infection Fractions Over Time\n(non-travel)')
-
+  ggplot(data = vui21oct01, mapping = aes(x = week, y = `VUI.21OCT.01`)) +
+    geom_line(alpha = 0.35) +
+    geom_point(alpha = 0.35) +
+    theme_minimal()  +
+    theme(axis.text.x = element_text(size = 11, angle = 90),
+          axis.text.y = element_text(size = 11),
+          axis.title.x = element_text(face = 'bold', size = 13),
+          axis.title.y = element_text(face = 'bold', size = 13),
+          legend.title = element_text(),
+          panel.grid.minor = element_blank(), panel.grid.major = element_line(size = 0.15)) +
+    xlab('\n') +
+    ylab('variant fraction\n') +
+    scale_x_date(date_breaks = "2 months", date_labels =  "%b %Y")
 
 }
 
