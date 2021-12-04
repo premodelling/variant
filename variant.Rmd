@@ -337,7 +337,7 @@ The graph of *Fig. 6* illustrates the non-travel VUI.21OCT.01 variant infection 
 
 \vspace{10pt}
 
-```{r out.width = '45%', fig.align = 'center', fig.cap = 'The non-travel VUI.21OCT.01 variant infection fractions over time.'}
+```{r out.width = '54%', fig.align = 'center', fig.cap = 'The non-travel VUI.21OCT.01 variant infection fractions over time.'}
 # from functions/GraphsVUI21OCT01.R
 ProgressionVUI21OCT01(vui21oct01 = vui21oct01)
 ```
@@ -368,11 +368,11 @@ The function *VariantProgressionModel( )* uses this model to predict daily infec
 ```
 \normalsize
 
-\pagebreak
+\vspace{10pt}
 
 The graph of *Fig. 7* illustrates the model's predictions.
 
-```{r out.width = '45%', fig.align = 'center', fig.cap = 'The original non-travel VUI.21OCT.01 variant infection fractions over time, and predictions.  During January 2022 the predictions become implausible; a prediction should not exceed 1 because it is a fraction, and it can only equal 1 if, and only if, no other variant exists.'}
+```{r out.width = '59%', fig.align = 'center', fig.cap = 'The original non-travel VUI.21OCT.01 variant infection fractions over time, and predictions.  During January 2022 the predictions become implausible; a prediction should not exceed 1 because it is a fraction, and it can only equal 1 if, and only if, no other variant exists.'}
 PredictionsVUI21OCT01(vui21oct01 = vui21oct01, estimates = estimates)
 ```
 
