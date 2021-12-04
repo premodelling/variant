@@ -135,3 +135,4 @@ estimates[estimates$date == '2022-01-01', c('date', 'prediction')]
 # Or
 selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'prediction')],
                     estimates[estimates$date == '2022-01-01', c('date', 'prediction')])
+
