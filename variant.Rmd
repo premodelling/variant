@@ -177,13 +177,15 @@ The graph of *Fig. 1* illustrates the progression of Delta variant infections ov
 is a fraction of the week's total non-travel infections due to all recorded variants; named and otherwise.  Delta's
 fractions peak at `r round(first(x = maxima$Delta), digits = 3)` on `r first(x = maxima$week)`; hereafter, it seems that the Delta fraction values are continuously, but slowly, declining.
 
+\vspace{10pt}
+
 <!--- Weekly Delta fractions over time --->
 ```{r fig.align = 'center', out.width = '65%', fig.cap = 'The Weekly Non-Travel Delta Variant Infections Fractions Over Time'}
 # 3.1.a
 GraphsDelta(local = local)
 ```
 
-\vspace{35pt}
+\vspace{65pt}
 
 ## Variant Peaks (non-travel)
 
@@ -198,6 +200,7 @@ The snippet below determines the peak date of each variant, and arranges the var
 
 \small
 ```{r echo = TRUE}
+  # The peak date of each variant
   peaks <- local %>%
           select(!(travel)) %>%
           tidyr::gather(key = 'variant', value = 'p', -week) %>%
@@ -227,7 +230,7 @@ knitr::kable(x = peaks[, c('variant', 'week', 'p')],
 # Variant Proportions by Known/Unknown Travel Links
 <!--- 4 --->
 
-The section *Infections Proportion Statistics by Variant* calculates a few variant proportions, and stores the results in named-list variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}}.
+The section [*Infections Proportion Statistics by Variant*](#infections-proportion-statistics-by-variant) ([Chapter 1: The Data](#the-data)) calculates a few variant proportions, and stores the results in named-list variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}}.
 
 \vspace{10pt}
 
@@ -240,7 +243,7 @@ The section *Infections Proportion Statistics by Variant* calculates a few varia
 
 \vspace{10pt}
 
-The \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} data frame element *leading* lists the five variants responsible for the five largest variant-infection--proportions, w.r.t. **(a)** known & unknown travel links, and **(b)** the data's time span; *Table 3*.
+The \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{proportions}} element *leading* lists the five variants responsible for the five largest variant-infection--proportions, w.r.t. **(a)** known & unknown travel links, and **(b)** the data's time span; *Table 3*.
 
 \vspace{10pt}
 
@@ -257,22 +260,22 @@ knitr::kable(x = proportions$leading, format = 'simple', col.names = c('Variant'
 ## The Predominant Variants
 <!--- 4.1 --->
 
-The time series of each variant of *Table 3* is illustrated in *Fig.*.  The second graph has a rescaled *y-axis*, which makes it easier to observe the progression of curves that have small fraction values.  A few observations:
+The time series of each variant of *Table 3* are illustrated in *Fig. 2* & *Fig. 3*; *Fig. 3* has a rescaled *y-axis*, which makes it easier to observe the progression of curves that have small fraction values.  A few observations:
 
-* **In relation to infections with known travel links**, the Alpha variant dominated initially, but the Beta & Eta fractions are fairly substantive.  During May 2021 the Delta variant overtook the Alpha variant - from May 2021, until the end of the data's time span, the Delta variant had the largest infections-fraction each week.  By the end of the period (a) the Alpha variant barely contributes to each week's travel linked infections, and (b) the fractional contributions of VUI.21OCT.01 are increasing each week.
+* In relation to infections **with known travel links**, the Alpha variant dominated initially, but the Beta & Eta fractions are fairly substantive.  During May 2021 the Delta variant overtook the Alpha variant - from May 2021, until the end of the data's time span, the Delta variant had the largest infections-fraction each week.  By the end of the period (a) the Alpha variant barely contributes to each week's travel linked infections, and (b) the fractional contributions of VUI.21OCT.01 are increasing each week.
 
 \vspace{5pt}
 
-* **In relation to infections without known travel links**, again the Alpha variant dominated initially, and quite comprehensively; the Beta & Eta variants contribute small fractions.  However, from May 2021 onward the Delta variant had the largest infections-fraction each week.  In line with
+* In relation to infections **without known travel links**, again the Alpha variant dominated initially, and quite comprehensively; the Beta & Eta variants contribute small fractions.  However, from May 2021 onward the Delta variant had the largest infections-fraction each week.  In line with
 
 \vspace{20pt}
 
-```{r out.width = '57%', fig.align = 'center', fig.cap = "Weekly fraction proportions of the predominant variants listed in Table 3; w.r.t. (a) travel and non-travel infections, and (b) the data's time span.  For a better view of the curves with generally small fractions, refer to Fig. 3; it is a version of this graph with a re-scaled y-axis. "}
+```{r out.width = '61%', fig.align = 'center', fig.cap = "Weekly fraction proportions of the predominant variants listed in Table 3; w.r.t. (a) travel and non-travel infections, and (b) the data's time span.  For a better view of the curves with generally small fractions, refer to Fig. 3; it is a version of this graph with a re-scaled y-axis. "}
 PredominantVariants(predominant = proportions$leadingseries)
 
 ```
 
-```{r out.width = '57%', fig.align = 'center', fig.cap = "A version of Fig. 2 wherein the y-axis has been re-scaled, this makes it easier to observe the progression of curves that have generally small fraction values."}
+```{r out.width = '61%', fig.align = 'center', fig.cap = "A version of Fig. 2 wherein the y-axis has been re-scaled, this makes it easier to observe the progression of curves that have generally small fraction values."}
 PredominantVariantsZoom(predominant = proportions$leadingseries)
 ```
 
@@ -299,13 +302,13 @@ stacksdata <- melted %>%
 
 \vspace{10pt}
 
-```{r out.width = '45%', fig.align = 'center', fig.cap = 'Progression w.r.t. travel-linked infections'}
+```{r out.width = '57%', fig.align = 'center', fig.cap = "Bars of weekly travel-linked infection fractions over time; for each of the 5 predominant variants and Other (12 variants + Other)."}
 StacksTravelYes(stacksdata = stacksdata)
 ```
 
 \vspace{10pt}
 
-```{r out.width = '45%', fig.align = 'center', fig.cap = 'Infection fractions, without known travel links, over time'}
+```{r out.width = '57%', fig.align = 'center', fig.cap = "Bars of weekly non-travel--linked infection fractions over time; for each of the 5 predominant variants and Other (12 variants + Other)."}
 StacksTravelNo(stacksdata = stacksdata)
 ```
 
@@ -319,16 +322,23 @@ This chapter focuses on non-travel VUI.21OCT.01 variant data; the variable \text
 
 \small
 ```{r echo = TRUE}
-# the non-travel VUI.21OCT.01 Data
-vui21oct01 <- variants %>%
-        filter(travel == 'none') %>%
-        select(week, 'VUI.21OCT.01')
+  # the non-travel VUI.21OCT.01 Data
+  vui21oct01 <- variants %>%
+          filter(travel == 'none') %>%
+          select(week, 'VUI.21OCT.01')
 ```
 \normalsize
 
+\vspace{20pt}
+
 ## Non-travel VUI.21OCT.01 Cases Over Time
 
-```{r out.width = '45%', fig.align = 'center'}
+The graph of *Fig. 6* illustrates the non-travel VUI.21OCT.01 variant infection fractions over time.
+
+\vspace{10pt}
+
+```{r out.width = '45%', fig.align = 'center', fig.cap = 'The non-travel VUI.21OCT.01 variant infection fractions over time.'}
+# from functions/GraphsVUI21OCT01.R
 ProgressionVUI21OCT01(vui21oct01 = vui21oct01)
 ```
 
@@ -347,15 +357,28 @@ wherein
 
 The function *VariantProgressionModel( )* uses this model to predict daily infection fractions w.r.t. **(a)** a start date, and **(b)** a length of time.  The variable \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{estimates}} stores the predictions w.r.t. an entire year, starting from the starting date of the non-travel VUI.21OCT.01 data.
 
+\vspace{10pt}
+
 \small
 ```{r echo = TRUE}
-starting <- min(vui21oct01$week)
-period <- lubridate::years(x = 1)
-estimates <- VariantProgressionModel(starting = starting, period = period)
+  # predicting variant fractions
+  starting <- min(vui21oct01$week)
+  period <- lubridate::years(x = 1)
+  estimates <- VariantProgressionModel(starting = starting, period = period)
 ```
 \normalsize
 
-The predictions for *1 September 2021* & *1 January 2022* are extracted from \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{estimates}}; *Table 4*  summarises the results.  The 1 January 2022 prediction is implausible because it is > 1; herein, a prediction should not exceed 1 because it is a fraction, and it can only equal 1 if, and only if, no other variant exist.
+\pagebreak
+
+The graph of *Fig. 7* illustrates the model's predictions.
+
+```{r out.width = '45%', fig.align = 'center', fig.cap = 'The original non-travel VUI.21OCT.01 variant infection fractions over time, and predictions.  During January 2022 the predictions become implausible; a prediction should not exceed 1 because it is a fraction, and it can only equal 1 if, and only if, no other variant exists.'}
+PredictionsVUI21OCT01(vui21oct01 = vui21oct01, estimates = estimates)
+```
+
+\vspace{20pt}
+
+The predictions for *1 September 2021* & *1 January 2022* are extracted from \textcolor[rgb]{0.5, 0.5, 0.0}{\emph{estimates}}; *Table 4*  summarises the results.  The 1 January 2022 prediction is implausible because it is > 1; herein, a prediction should not exceed 1 because it is a fraction, and it can only equal 1 if, and only if, no other variant exists.
 
 ```{r}
 selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'prediction')],
@@ -363,10 +386,7 @@ selections <- rbind(estimates[estimates$date == '2021-09-01', c('date', 'predict
 knitr::kable(x = selections, digits = 3, format = 'simple', caption = 'Predictions for 1 September 2021 & 1 January 2022')
 ```
 
-\vspace{20pt}
 
-## Prediction Curve
 
-```{r out.width = '45%', fig.align = 'center'}
-PredictionsVUI21OCT01(vui21oct01 = vui21oct01, estimates = estimates)
-```
+
+
