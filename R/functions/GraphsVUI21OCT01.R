@@ -9,7 +9,7 @@ ProgressionVUI21OCT01 <- function (vui21oct01) {
   plot(vui21oct01$week, vui21oct01$VUI.21OCT.01,
        type = "l", lty = 'solid', col = 'black', lwd = 1.0,
        frame.plot = FALSE,
-       xlab = '', ylab = 'proportion', main = 'VUI.21OCT.01')
+       xlab = '', ylab = 'fraction', main = 'VUI.21OCT.01 Infection Fractions Over Time\n(non-travel)')
 
 
 }
@@ -23,9 +23,9 @@ PredictionsVUI21OCT01 <- function (vui21oct01, estimates) {
        xlim = c(min(vui21oct01$week, estimates$date), max(vui21oct01$week, estimates$date)),
        type = "l", lty = 'solid', col = 'black', lwd = 2.5,
        frame.plot = FALSE,
-       xlab = '', ylab = 'proportion', main = 'VUI.21OCT.01')
+       xlab = '', ylab = 'fraction', main = 'VUI.21OCT.01 Infection Fractions Over Time\n(non-travel)')
   points(x = estimates$date, y = estimates$prediction,
          pch = 19, cex = 0.5,
-         col = scales::alpha(colour = 'grey', alpha = 0.25))
+         col = scales::alpha(colour = 'green', alpha = 0.25))
 
 }
