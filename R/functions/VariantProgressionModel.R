@@ -3,9 +3,13 @@
 # Created by: Think
 # Created on: 20/11/2021
 
+
 #' @param starting: The predictions calculation start date; class Date.
 #' @param period: The length of time - from 'starting' onwards -  for which predictions are calculated.  The
 #'                value must be a lubridate::years(), lubridate::weeks(), or lubridate::days() value
+#'
+#' @return predictions
+#'
 VariantProgressionModel <- function (starting, period) {
 
   # inspection
