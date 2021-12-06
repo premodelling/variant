@@ -1,8 +1,16 @@
-# Title     : TODO
-# Objective : TODO
-# Created by: Think
+# Title     : Variants Proportions
+# Objective : Variants Proportions
+# Created by: 36112985
 # Created on: 21/11/2021
 
+
+#' @param melted: The long form of the variants data
+#'
+#' @return data frames
+#'              none: the non-travel proportions contributed per variant & Other
+#'              travel: the travel proportions contributed per variant & Other
+#'              leading: the 5 variants reponsible for the 5 largest infection proportions during the data's time span
+#'              leading series: the data of the 5 variants of 'leading'
 VariantsProportions <- function (melted) {
 
   # Preliminaries
