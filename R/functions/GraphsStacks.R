@@ -1,9 +1,13 @@
-# Title     : TODO
-# Objective : TODO
-# Created by: Think
+# Title     : Graphs Stacks
+# Objective : Graphs Stacks
+# Created by: 36112895
 # Created on: 20/11/2021
 
 
+#' @param stacksdata: the data for the bar graphs (the 5 leading variants & Other (12 variants + Other)
+#'
+#' @note Draws the 'travel' bar graph
+#'
 StacksTravelYes <- function (stacksdata) {
 
   stacksdata %>%
@@ -24,6 +28,11 @@ StacksTravelYes <- function (stacksdata) {
 
 }
 
+
+#' @param stacksdata: the data for the bar graphs (the 5 leading variants & Other (12 variants + Other)
+#'
+#' @note Draws the 'non-travel' bar graph
+#'
 StacksTravelNo <- function (stacksdata) {
 
   stacksdata %>%
