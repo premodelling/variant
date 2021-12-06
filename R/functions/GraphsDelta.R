@@ -10,6 +10,8 @@
 #'
 #' @param local: the data frame of non-travel variants data
 #'
+#' @note Draws the Delta non-travel infections graph
+#'
 GraphsDelta <- function (local) {
 
   # caption

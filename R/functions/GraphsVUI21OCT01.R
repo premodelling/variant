@@ -3,7 +3,11 @@
 # Created by: 36112985
 # Created on: 27/11/2021
 
-#' @param vui21oct01:
+
+#' @param vui21oct01: VUI.21OCT.01 non-travel data
+#'
+#' @note Draws the non-travel VUI.21OCT.01 infections graph
+#'
 ProgressionVUI21OCT01 <- function (vui21oct01) {
 
   ggplot(data = vui21oct01, mapping = aes(x = week, y = `VUI.21OCT.01`)) +
@@ -22,8 +26,12 @@ ProgressionVUI21OCT01 <- function (vui21oct01) {
 
 }
 
-#' @param vui21oct01
-#' @param vui21oct01
+
+#' @param vui21oct01: VUI.21OCT.01 non-travel data
+#' @param estimates: VUI.21OCT.01 non-travel predictions
+#'
+#' @note Draws the original data & predictions graph
+#'
 PredictionsVUI21OCT01 <- function (vui21oct01, estimates) {
 
   T <- vui21oct01 %>%

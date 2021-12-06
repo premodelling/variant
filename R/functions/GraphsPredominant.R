@@ -3,10 +3,13 @@
 # Created by: 36112985
 # Created on: 20/11/2021
 
+
+#' @param predominant: the data of the 5 leading variants
+#'
+#' @note Draws the line graphs; disaggregated by travel/non-travel
+#'
 PredominantVariants <- function (predominant) {
 
-  # ... the corresponding graph
-  # ... add caption & title
   ggplot(data = predominant, mapping = aes(x = week, y = fraction)) +
     geom_line(aes(colour = variant, linetype = travel)) +
     geom_point(aes(colour = variant), size = 0.75) +
@@ -23,6 +26,11 @@ PredominantVariants <- function (predominant) {
 
 }
 
+
+#' @param predominant: the data of the 5 leading variants
+#'
+#' @note Draws the 're-scaled y-axis' line graphs; disaggregated by travel/non-travel
+#'
 PredominantVariantsZoom <- function (predominant) {
 
   ggplot(data = predominant, mapping = aes(x = week, y = fraction)) +
